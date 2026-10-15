@@ -3,11 +3,11 @@
 // 프로젝트 내용(저장소·배포 주소 포함)은 data/projects.json → `npm run seed` 로 DB에 넣습니다.
 
 export const profile = {
-  name: '김현빈',
-  department: '정보보안학과',
-  studentId: '92318518',
+  name: "김현빈",
+  department: "정보보안학과",
+  studentId: "92318518",
   // 예: 'https://github.com/내아이디'
-  github: '',
+  github: "https://github.com/GHN0728",
   // 공개해도 괜찮은 이메일만 넣으세요
-  email: '',
-}
+  email: "gim29771@gmail.com",
+};

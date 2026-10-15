@@ -4,7 +4,7 @@
     "order": 1,
     "title": "StudyNote",
     "lead": "PDF 강의자료를 올리면 AI가 요약문, 핵심 포인트, 키워드, 예상 문제를 정리해 주는 학습 도우미",
-    "course": "웹보안프로그래밍 팀 프로젝트 (4명)",
+    "course": "웹보안프로그래밍 팀 프로젝트 ",
     "role": "PDF 업로드, AI 요약 (화면, API, 보안 처리)",
     "stack": [
       "Next.js App Router",
