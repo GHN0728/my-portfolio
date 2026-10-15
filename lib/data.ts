@@ -28,7 +28,7 @@ export async function getProjects(): Promise<{
 export async function getGuestbook(): Promise<GuestbookEntryData[] | null> {
   try {
     await connectDB()
-    const docs = await GuestbookEntry.find({}, { name: 1, message: 1, createdAt: 1 })
+    const docs = await GuestbookEntry.find({}, 'name message createdAt')
       .sort({ createdAt: -1 })
       .limit(30)
       .lean()
