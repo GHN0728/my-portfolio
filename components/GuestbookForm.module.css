@@ -1,0 +1,94 @@
+.form {
+  display: grid;
+  gap: 16px;
+  max-width: var(--measure);
+}
+
+.row {
+  max-width: 18rem;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field span {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.field small {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.6;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 6.5em;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 0;
+  border-color: var(--ink);
+}
+
+.trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+
+.button {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--ink);
+  color: var(--fog);
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 0.88;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+.status {
+  color: var(--pass);
+  font-size: 0.9375rem;
+}
+
+.error {
+  color: var(--block);
+}

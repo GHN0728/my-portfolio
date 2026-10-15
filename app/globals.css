@@ -1,0 +1,115 @@
+/* ---------- 색·글꼴 기준값 ---------- */
+:root {
+  color-scheme: light;
+
+  --fog: #edf0f3; /* 페이지 바탕 */
+  --paper: #ffffff; /* 표, 그림 바탕 */
+  --ink: #172033; /* 본문 */
+  --muted: #5a6475; /* 보조 글씨 */
+  --line: #c9d0d9; /* 구분선 */
+  --pass: #1f7a5a; /* 통과 */
+  --block: #b4372f; /* 차단 */
+  --signal: #f2c14e; /* 포커스, 진행 중 표시 */
+
+  /* 검사 로그 패널 (라이트에서도 어두운 판) */
+  --log-bg: #172033;
+  --log-text: #dfe5ee;
+  --log-dim: #8d97a8;
+  --log-pass: #7fd1a8;
+  --log-border: transparent;
+
+  --font-sans-stack:
+    'IBM Plex Sans KR', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-mono-stack: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+
+  --measure: 68ch;
+  --page: 1080px;
+  --gutter: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --fog: #11161f;
+    --paper: #18202c;
+    --ink: #e4e8ee;
+    --muted: #9aa3b2;
+    --line: #2c3646;
+    --pass: #6cc59b;
+    --block: #ec7b72;
+    --signal: #f2c14e;
+
+    --log-bg: #0a0f17;
+    --log-text: #dfe5ee;
+    --log-dim: #7d8798;
+    --log-pass: #7fd1a8;
+    --log-border: #2c3646;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 16px;
+  }
+}
+
+/* ---------- 기본 ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--fog);
+  color: var(--ink);
+  font-family: var(--font-sans-stack);
+  font-size: 1.0625rem; /* 17px */
+  line-height: 1.7;
+  word-break: keep-all; /* 한글 단어 중간에서 줄바꿈하지 않기 */
+  overflow-wrap: anywhere;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
