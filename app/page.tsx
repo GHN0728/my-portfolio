@@ -10,21 +10,6 @@ import styles from "./page.module.css";
 // 방명록이 바로 반영되도록 요청마다 DB에서 새로 읽음
 export const dynamic = "force-dynamic";
 
-/* 첫 화면 오른쪽: StudyNote에서 PDF 한 개가 요약되기까지 실제로 거치는 검사 */
-const checks: { kind: "req" | "pass" | "ai" | "ok"; text: string }[] = [
-  { kind: "req", text: "POST /api/summarize" },
-  { kind: "pass", text: "요청 횟수 10분에 10회 이하" },
-  { kind: "pass", text: "파일 크기 10MB 이하" },
-  { kind: "pass", text: "파일 시그니처 %PDF- 확인" },
-  { kind: "pass", text: "페이지 80장 이하" },
-  { kind: "pass", text: "요약 옵션 허용 목록 확인" },
-  { kind: "ai", text: "Gemini에 PDF 전달, JSON 형식 고정" },
-  { kind: "pass", text: "AI 응답 형식과 길이 재검증" },
-  { kind: "ok", text: "200 OK  요약 결과 표시" },
-];
-
-const mark = { req: ">", pass: "✓", ai: "…", ok: "=" } as const;
-
 const dateFormat = new Intl.DateTimeFormat("ko-KR", {
   timeZone: "Asia/Seoul",
   year: "numeric",
@@ -45,7 +30,6 @@ export default async function Home() {
       <section id="top" className={styles.hero}>
         <div>
           <h1 className={styles.name}>{profile.name}</h1>
-          <p className={styles.lead}>{profile.tagline}</p>
           <dl className={styles.facts}>
             {profile.school && (
               <div>
@@ -61,6 +45,10 @@ export default async function Home() {
               <dt>학번</dt>
               <dd>{profile.studentId}</dd>
             </div>
+            <div>
+              <dt>관심 분야</dt>
+              <dd>{profile.interest}</dd>
+            </div>
           </dl>
           <p className={`${styles.heroLinks} no-print`}>
             <a href="#project" className={styles.button}>
@@ -72,25 +60,16 @@ export default async function Home() {
           </p>
         </div>
 
-        <figure className={`${styles.log} no-print`} aria-labelledby="log-caption">
-          <figcaption id="log-caption" className={styles.logCaption}>
-            StudyNote에서 PDF 한 개가 요약되기까지
-          </figcaption>
-          <ol className={styles.logLines}>
-            {checks.map((c, i) => (
-              <li
-                key={c.text}
-                className={styles[c.kind]}
-                style={{ animationDelay: `${150 + i * 140}ms` }}
-              >
-                <span className={styles.logMark} aria-hidden>
-                  {mark[c.kind]}
-                </span>
-                {c.text}
-              </li>
-            ))}
-          </ol>
-        </figure>
+        <aside className={styles.focus} aria-labelledby="focus-title">
+          <p className={styles.focusLabel}>지금 공부하는 분야</p>
+          <h2 id="focus-title" className={styles.focusTitle}>
+            {profile.interest}
+          </h2>
+          <p>{profile.cloud.summary}</p>
+          <a href="#cloud" className={`${styles.focusLink} no-print`}>
+            공부하는 내용 보기 →
+          </a>
+        </aside>
       </section>
 
       {/* ---------- 소개 ---------- */}
@@ -100,6 +79,32 @@ export default async function Home() {
           {profile.about.map((text) => (
             <p key={text}>{text}</p>
           ))}
+        </div>
+      </section>
+
+      {/* ---------- 클라우드 ---------- */}
+      <section id="cloud" className={styles.section}>
+        <h2 className={styles.h2}>클라우드</h2>
+        <div className={styles.cloud}>
+          <div className={styles.block}>
+            <h3 className={styles.h4}>관심 있게 공부하는 주제</h3>
+            <ul className={styles.topics}>
+              {profile.cloud.topics.map((t) => (
+                <li key={t.title}>
+                  <strong>{t.title}</strong>
+                  <span>{t.body}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className={styles.block}>
+            <h3 className={styles.h4}>이 사이트에서 직접 해 본 것</h3>
+            <ul className={styles.practice}>
+              {profile.cloud.practice.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 

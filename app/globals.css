@@ -129,7 +129,7 @@ section[id] {
   scroll-margin-top: 64px;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 940px) {
   section[id] {
     scroll-margin-top: 96px;
   }

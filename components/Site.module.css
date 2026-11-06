@@ -112,7 +112,7 @@
 }
 
 /* 메뉴가 길어지는 폭에서는 브랜드·테마 버튼 아래 줄에서 가로로 넘긴다 */
-@media (max-width: 860px) {
+@media (max-width: 940px) {
   .topbarInner {
     flex-wrap: wrap;
     justify-content: space-between;

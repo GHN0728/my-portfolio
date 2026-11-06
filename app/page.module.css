@@ -62,11 +62,84 @@
   letter-spacing: -0.03em;
 }
 
-.lead {
-  margin-top: 20px;
-  max-width: 22em;
-  font-size: clamp(1.1875rem, 2.4vw, 1.4375rem);
-  line-height: 1.55;
+/* 지금 공부하는 분야 */
+.focus {
+  display: grid;
+  gap: 12px;
+  padding: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--log-border);
+  background: var(--log-bg);
+  color: var(--log-text);
+}
+
+.focusLabel {
+  color: var(--log-dim);
+  font-size: 0.875rem;
+}
+
+.focusTitle {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.focusLink {
+  justify-self: start;
+  margin-top: 4px;
+  color: var(--log-pass);
+  font-weight: 500;
+  text-underline-offset: 4px;
+}
+
+/* ---------- 클라우드 ---------- */
+.cloud {
+  display: grid;
+  gap: 40px;
+  min-width: 0;
+}
+
+.topics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.topics li {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--paper);
+}
+
+.topics span {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.practice {
+  display: grid;
+  gap: 6px;
+  max-width: var(--measure);
+}
+
+.practice li {
+  padding-left: 1.4em;
+  text-indent: -1.4em;
+}
+
+.practice li::before {
+  content: '✓';
+  display: inline-block;
+  width: 1.4em;
+  text-indent: 0;
+  color: var(--pass);
+  font-weight: 700;
 }
 
 .facts {
@@ -87,7 +160,7 @@
   color: var(--muted);
 }
 
-/* 검사 로그: 이 페이지에서 유일하게 눈에 띄는 요소 */
+/* 검사 로그 모양 패널 (404 페이지) */
 .log {
   border-radius: 6px;
   border: 1px solid var(--log-border);
@@ -126,14 +199,6 @@
 
 .req {
   color: var(--log-dim);
-}
-
-.pass .logMark {
-  color: var(--log-pass);
-}
-
-.ai {
-  color: var(--signal);
 }
 
 .ok {
@@ -663,7 +728,8 @@
 /* ---------- 좁은 화면 ---------- */
 @media (max-width: 900px) {
   .cards,
-  .repos {
+  .repos,
+  .topics {
     grid-template-columns: 1fr;
   }
 

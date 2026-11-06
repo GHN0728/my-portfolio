@@ -6,7 +6,7 @@ import SiteHeader from '@/components/SiteHeader'
 import styles from '@/components/Site.module.css'
 import './globals.css'
 
-const description = `${profile.department} ${profile.name}의 포트폴리오. ${profile.tagline}.`
+const description = `${profile.department} ${profile.name}의 포트폴리오. 웹 보안 프로젝트와 ${profile.interest} 공부 내용을 소개합니다.`
 
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),

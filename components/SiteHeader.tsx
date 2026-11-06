@@ -13,6 +13,7 @@ export default function SiteHeader({ name, github, hasTimeline }: Props) {
 
   const items = [
     { id: 'about', label: '소개' },
+    { id: 'cloud', label: '클라우드' },
     { id: 'skills', label: '기술' },
     { id: 'project', label: '프로젝트' },
     { id: 'lab', label: '보안 실습실' },
