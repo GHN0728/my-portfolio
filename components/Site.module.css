@@ -1,0 +1,135 @@
+/* 모든 페이지에 공통으로 나오는 머리글과 바닥글 */
+.skip {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  z-index: 30;
+  padding: 8px 12px;
+  background: var(--ink);
+  color: var(--fog);
+}
+
+.skip:focus {
+  top: 12px;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--line);
+  background: var(--fog);
+}
+
+.topbarInner,
+.footerInner {
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.topbarInner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 60px;
+}
+
+.brand {
+  flex: none;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.navWrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.nav {
+  display: flex;
+  justify-content: flex-end;
+  gap: 18px;
+  font-size: 0.9375rem;
+  white-space: nowrap;
+}
+
+.nav a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.nav a:hover,
+.nav a[aria-current] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.nav a[aria-current] {
+  text-decoration-thickness: 2px;
+}
+
+.themeButton {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.themeButton:hover {
+  background: var(--paper);
+}
+
+.footer {
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.footerInner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 32px 48px;
+}
+
+.footerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+}
+
+.footerLinks a {
+  text-underline-offset: 4px;
+}
+
+/* 메뉴가 길어지는 폭에서는 브랜드·테마 버튼 아래 줄에서 가로로 넘긴다 */
+@media (max-width: 860px) {
+  .topbarInner {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0 12px;
+    padding-top: 8px;
+  }
+
+  .navWrap {
+    order: 3;
+    flex-basis: 100%;
+    overflow-x: auto;
+    padding-block: 8px 10px;
+    scrollbar-width: none;
+  }
+
+  .nav {
+    justify-content: flex-start;
+    width: max-content;
+  }
+}

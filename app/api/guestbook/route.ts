@@ -1,6 +1,7 @@
 import { connectDB } from '@/lib/mongodb'
 import { GuestbookEntry } from '@/models/GuestbookEntry'
 import { GUESTBOOK_LIMITS } from '@/lib/types'
+import { cleanText } from '@/lib/validation'
 
 export const runtime = 'nodejs'
 
@@ -31,15 +32,6 @@ function rateLimited(ip: string) {
 
 function json(status: number, body: Record<string, unknown>) {
   return Response.json(body, { status })
-}
-
-function clean(value: unknown, max: number): string | null {
-  if (typeof value !== 'string') return null // 객체·배열 등은 거부
-  const text = value
-    .replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, '') // 줄바꿈 빼고 제어문자 제거
-    .trim()
-  if (!text || text.length > max) return null
-  return text
 }
 
 export async function POST(req: Request) {
@@ -78,8 +70,8 @@ export async function POST(req: Request) {
   }
 
   // 3), 4) 입력 검사
-  const name = clean(body.name, GUESTBOOK_LIMITS.name)
-  const message = clean(body.message, GUESTBOOK_LIMITS.message)
+  const name = cleanText(body.name, GUESTBOOK_LIMITS.name)
+  const message = cleanText(body.message, GUESTBOOK_LIMITS.message)
   if (!name) {
     return json(400, {
       ok: false,

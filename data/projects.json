@@ -4,7 +4,7 @@
     "order": 1,
     "title": "StudyNote",
     "lead": "PDF 강의자료를 올리면 AI가 요약문, 핵심 포인트, 키워드, 예상 문제를 정리해 주는 학습 도우미",
-    "course": "웹보안프로그래밍 팀 프로젝트 ",
+    "course": "웹보안프로그래밍 팀 프로젝트",
     "role": "PDF 업로드, AI 요약 (화면, API, 보안 처리)",
     "stack": [
       "Next.js App Router",
@@ -88,5 +88,72 @@
         "fix": "개발 모드에서만 상세 원인을 덧붙이고, 배포에서는 내부 정보를 숨기도록 나눴다."
       }
     ]
+  },
+  {
+    "slug": "my-portfolio",
+    "order": 2,
+    "title": "포트폴리오 사이트",
+    "lead": "지금 보고 있는 이 사이트. 프로젝트를 DB에서 불러오고, 방명록과 브라우저 안에서 동작하는 보안 실습 도구를 제공한다.",
+    "course": "웹보안프로그래밍",
+    "role": "화면, API, DB, 보안 처리, 배포",
+    "stack": [
+      "Next.js App Router",
+      "React",
+      "TypeScript",
+      "MongoDB",
+      "Mongoose",
+      "Vercel"
+    ],
+    "repoUrl": "https://github.com/GHN0728/my-portfolio",
+    "demoUrl": "https://my-portfolio-ten-rho-84.vercel.app",
+    "steps": [
+      {
+        "title": "요청 확인",
+        "body": "페이지를 열 때마다 일회용 nonce를 만들어 CSP 헤더에 담고, 허용된 스크립트만 실행되게 한다."
+      },
+      {
+        "title": "데이터 읽기",
+        "body": "프로젝트와 방명록을 MongoDB에서 읽는다. DB에 연결하지 못하면 저장해 둔 프로젝트 내용을 대신 보여 준다."
+      },
+      {
+        "title": "글쓰기 검사",
+        "body": "방명록 글은 출처, 요청 횟수, 값의 형식, 길이, 허니팟을 차례로 확인한 뒤에만 저장한다."
+      },
+      {
+        "title": "안전하게 출력",
+        "body": "저장된 글은 React가 텍스트로만 출력하므로 스크립트를 적어도 실행되지 않는다."
+      }
+    ],
+    "threats": [
+      {
+        "threat": "다른 사이트에서 보낸 글쓰기 요청",
+        "answer": "Origin 헤더가 이 사이트와 같은지 서버에서 확인"
+      },
+      {
+        "threat": "NoSQL 인젝션",
+        "answer": "입력값이 문자열인지 검사해 { \"$gt\": \"\" } 같은 객체를 거부"
+      },
+      {
+        "threat": "XSS",
+        "answer": "React 텍스트 출력, innerHTML 미사용, nonce 기반 CSP로 허용되지 않은 스크립트 차단"
+      },
+      {
+        "threat": "도배·스팸",
+        "answer": "IP별 요청 횟수 제한, 사람에게 보이지 않는 허니팟 입력칸"
+      },
+      {
+        "threat": "과도한 입력",
+        "answer": "서버 검사와 DB 스키마에서 길이를 함께 제한"
+      },
+      {
+        "threat": "클릭재킹",
+        "answer": "X-Frame-Options와 CSP frame-ancestors로 다른 사이트의 iframe 삽입 차단"
+      },
+      {
+        "threat": "DB 접속 정보 노출",
+        "answer": "환경변수로만 관리하고, 읽기·쓰기 권한만 가진 계정 사용 (최소 권한)"
+      }
+    ],
+    "fixes": []
   }
 ]

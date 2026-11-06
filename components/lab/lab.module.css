@@ -1,0 +1,338 @@
+.lab {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+
+.intro {
+  max-width: var(--measure);
+}
+
+/* ---------- 탭 ---------- */
+.tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  border-bottom: 2px solid var(--ink);
+  scrollbar-width: thin;
+}
+
+.tabs button {
+  flex: none;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 4px 4px 0 0;
+  background: transparent;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.tabs button:hover {
+  color: var(--ink);
+}
+
+.tabs button[aria-selected='true'] {
+  background: var(--ink);
+  color: var(--fog);
+  font-weight: 500;
+}
+
+.tabs button:focus-visible {
+  outline-offset: -3px;
+}
+
+.panel {
+  min-height: 340px;
+}
+
+/* ---------- 도구 공통 ---------- */
+.tool {
+  display: grid;
+  gap: 16px;
+  max-width: 44rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chips button,
+.fileButton {
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.chips button:hover,
+.fileButton:hover {
+  border-color: var(--ink);
+}
+
+.chips button[aria-pressed='true'] {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+  font-weight: 500;
+}
+
+.fileButton {
+  font-weight: 500;
+}
+
+.fileButton input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.fileButton:focus-within {
+  outline: 3px solid var(--signal);
+  outline-offset: 3px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.field > span {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono-stack);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.field textarea {
+  resize: vertical;
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline-offset: 0;
+  border-color: var(--ink);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+/* ---------- 결과 ---------- */
+.passed,
+.blocked,
+.result {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px 16px;
+  border-left: 3px solid var(--line);
+  background: var(--paper);
+}
+
+.passed {
+  border-left-color: var(--pass);
+}
+
+.blocked {
+  border-left-color: var(--block);
+}
+
+.verdict {
+  font-weight: 700;
+}
+
+.passed .verdict {
+  color: var(--pass);
+}
+
+.blocked .verdict {
+  color: var(--block);
+}
+
+.outputLabel {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.output {
+  max-height: 8em;
+  overflow-y: auto;
+  font-family: var(--font-mono-stack);
+  font-size: 0.9375rem;
+  white-space: pre-wrap;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.mono {
+  font-family: var(--font-mono-stack);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.facts {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9375rem;
+}
+
+.facts div {
+  display: grid;
+  grid-template-columns: 7.5em minmax(0, 1fr);
+  gap: 12px;
+}
+
+.facts dt {
+  color: var(--muted);
+}
+
+/* ---------- 비밀번호 ---------- */
+.meter {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.meter span {
+  height: 6px;
+  border-radius: 2px;
+  background: var(--line);
+}
+
+.meter span[data-on='true'][data-level='0'],
+.meter span[data-on='true'][data-level='1'] {
+  background: var(--block);
+}
+
+.meter span[data-on='true'][data-level='2'] {
+  background: var(--signal);
+}
+
+.meter span[data-on='true'][data-level='3'] {
+  background: var(--pass);
+}
+
+.checklist {
+  display: grid;
+  gap: 2px;
+  font-size: 0.9375rem;
+}
+
+.checklist li {
+  display: flex;
+  gap: 8px;
+}
+
+.checklist li[data-ok='true'] > span:first-child {
+  color: var(--pass);
+}
+
+.checklist li[data-ok='false'] > span:first-child {
+  color: var(--block);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- 해시 ---------- */
+.columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.hashSide {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.bar {
+  height: 6px;
+  border-radius: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  background: var(--ink);
+}
+
+/* ---------- 헤더 ---------- */
+.headerTable {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+
+.headerTable ul {
+  border-top: 1px solid var(--line);
+}
+
+.headerTable li {
+  display: grid;
+  gap: 2px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.headerName {
+  font-weight: 500;
+}
+
+.headerTable li[data-ok='true'] .headerName span {
+  color: var(--pass);
+}
+
+.headerTable li[data-ok='false'] .headerName span {
+  color: var(--block);
+}
+
+@media (max-width: 640px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .facts div {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

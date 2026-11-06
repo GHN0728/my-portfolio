@@ -1,8 +1,10 @@
-import Image from "next/image";
 import { profile } from "@/data/profile";
 import { getGuestbook, getProjects } from "@/lib/data";
-import type { ProjectData } from "@/lib/types";
+import { getRepos } from "@/lib/github";
 import GuestbookForm from "@/components/GuestbookForm";
+import ProjectExplorer from "@/components/ProjectExplorer";
+import SecurityLab from "@/components/lab/SecurityLab";
+import ContactActions from "@/components/ContactActions";
 import styles from "./page.module.css";
 
 // 방명록이 바로 반영되도록 요청마다 DB에서 새로 읽음
@@ -31,279 +33,214 @@ const dateFormat = new Intl.DateTimeFormat("ko-KR", {
 });
 
 export default async function Home() {
-  const [{ projects }, guestbook] = await Promise.all([
+  const [{ projects }, guestbook, repos] = await Promise.all([
     getProjects(),
     getGuestbook(),
+    getRepos(),
   ]);
 
   return (
     <>
-      <a href="#main" className={styles.skip}>
-        본문으로 건너뛰기
-      </a>
-
-      <header className={styles.topbar}>
-        <div className={styles.topbarInner}>
-          <a href="#top" className={styles.brand}>
-            {profile.name}
-          </a>
-          <nav aria-label="페이지 안 이동">
-            <ul className={styles.nav}>
-              <li>
-                <a href="#about">소개</a>
-              </li>
-              <li>
-                <a href="#project">프로젝트</a>
-              </li>
-              <li>
-                <a href="#guestbook">방명록</a>
-              </li>
-              {profile.github && (
-                <li>
-                  <a href={profile.github} target="_blank" rel="noreferrer">
-                    GitHub
-                  </a>
-                </li>
-              )}
-            </ul>
-          </nav>
-        </div>
-      </header>
-
-      <main id="main">
-        {/* ---------- 첫 화면 ---------- */}
-        <section id="top" className={styles.hero}>
-          <div className={styles.heroText}>
-            <h1 className={styles.name}>{profile.name}</h1>
-            <p className={styles.lead}>PDF 파일 업로드와 AI 요약 기능 추가</p>
-            <dl className={styles.facts}>
+      {/* ---------- 첫 화면 ---------- */}
+      <section id="top" className={styles.hero}>
+        <div>
+          <h1 className={styles.name}>{profile.name}</h1>
+          <p className={styles.lead}>{profile.tagline}</p>
+          <dl className={styles.facts}>
+            {profile.school && (
               <div>
-                <dt>학과</dt>
-                <dd>{profile.department}</dd>
+                <dt>학교</dt>
+                <dd>{profile.school}</dd>
               </div>
-              <div>
-                <dt>학번</dt>
-                <dd>{profile.studentId}</dd>
-              </div>
-            </dl>
-          </div>
-
-          <figure className={styles.log} aria-labelledby="log-caption">
-            <figcaption id="log-caption" className={styles.logCaption}>
-              StudyNote에서 PDF 한 개가 요약되기까지
-            </figcaption>
-            <ol className={styles.logLines}>
-              {checks.map((c, i) => (
-                <li
-                  key={c.text}
-                  className={styles[c.kind]}
-                  style={{ animationDelay: `${150 + i * 140}ms` }}
-                >
-                  <span className={styles.logMark} aria-hidden>
-                    {mark[c.kind]}
-                  </span>
-                  {c.text}
-                </li>
-              ))}
-            </ol>
-          </figure>
-        </section>
-
-        {/* ---------- 소개 ---------- */}
-        <section id="about" className={styles.section}>
-          <h2 className={styles.h2}>소개</h2>
-          <div className={styles.prose}>
-            <p>
-              {profile.department}에서 공부하고 있습니다. 공격자가 어디를 먼저
-              두드리는지 알아야 막는 코드도 쓸 수 있다고 생각해서, 직접 만든
-              기능도 “이 값을 그대로 믿어도 되는가”라는 질문으로 다시 읽습니다.
-            </p>
-            <p>
-              웹보안프로그래밍 팀 프로젝트에서 PDF 업로드와 AI 요약 기능을
-              맡았고 처음 접한 웹 개발이었지만 파일 검증과 API 키 관리, AI 응답
-              검증까지 직접 설계했습니다.
-            </p>
-          </div>
-        </section>
-
-        {/* ---------- 프로젝트 ---------- */}
-        <section id="project" className={styles.section}>
-          <h2 className={styles.h2}>프로젝트</h2>
-
-          <div className={styles.projectList}>
-            {projects.map((p) => (
-              <ProjectArticle key={p.slug} project={p} />
-            ))}
-          </div>
-        </section>
-
-        {/* ---------- 방명록 (MongoDB) ---------- */}
-        <section id="guestbook" className={styles.section}>
-          <h2 className={styles.h2}>방명록</h2>
-          <div className={styles.guestbook}>
-            <p className={styles.prose}>
-              사이트를 보고 남기고 싶은 말이 있으면 적어 주세요.
-            </p>
-            <GuestbookForm />
-
-            {guestbook === null ? (
-              <p className={styles.notice}>
-                방명록을 불러오지 못했어요. 잠시 뒤에 새로고침해 주세요.
-              </p>
-            ) : guestbook.length === 0 ? (
-              <p className={styles.notice}>
-                아직 남겨진 글이 없어요. 첫 글을 남겨 주세요.
-              </p>
-            ) : (
-              <ol className={styles.entries}>
-                {guestbook.map((g) => (
-                  <li key={g.id}>
-                    <p className={styles.entryHead}>
-                      <strong>{g.name}</strong>
-                      <time dateTime={g.createdAt}>
-                        {dateFormat.format(new Date(g.createdAt))}
-                      </time>
-                    </p>
-                    {/* 글자로만 출력: <script>를 적어도 실행되지 않음 */}
-                    <p className={styles.entryBody}>{g.message}</p>
-                  </li>
-                ))}
-              </ol>
             )}
-          </div>
-        </section>
-      </main>
-
-      <footer className={styles.footer}>
-        <div className={styles.footerInner}>
-          <p>© 2026 {profile.name}</p>
-          {(profile.github || profile.email) && (
-            <p className={styles.links}>
-              {profile.github && (
-                <a href={profile.github} target="_blank" rel="noreferrer">
-                  GitHub
-                </a>
-              )}
-              {profile.email && (
-                <a href={`mailto:${profile.email}`}>{profile.email}</a>
-              )}
-            </p>
-          )}
-        </div>
-      </footer>
-    </>
-  );
-}
-
-function ProjectArticle({ project: p }: { project: ProjectData }) {
-  return (
-    <article className={styles.project}>
-      <header className={styles.projectHead}>
-        <h3 className={styles.h3}>{p.title}</h3>
-        <p className={styles.projectLead}>{p.lead}</p>
-        <dl className={styles.projectMeta}>
-          <div>
-            <dt>수업</dt>
-            <dd>{p.course}</dd>
-          </div>
-          <div>
-            <dt>맡은 부분</dt>
-            <dd>{p.role}</dd>
-          </div>
-          <div>
-            <dt>사용 기술</dt>
-            <dd>{p.stack.join(", ")}</dd>
-          </div>
-        </dl>
-        {(p.repoUrl || p.demoUrl) && (
-          <p className={styles.links}>
-            {p.repoUrl && (
-              <a href={p.repoUrl} target="_blank" rel="noreferrer">
-                코드 보기 (GitHub)
-              </a>
-            )}
-            {p.demoUrl && (
-              <a href={p.demoUrl} target="_blank" rel="noreferrer">
-                배포 사이트 열기
-              </a>
-            )}
+            <div>
+              <dt>전공</dt>
+              <dd>{profile.department}</dd>
+            </div>
+            <div>
+              <dt>학번</dt>
+              <dd>{profile.studentId}</dd>
+            </div>
+          </dl>
+          <p className={`${styles.heroLinks} no-print`}>
+            <a href="#project" className={styles.button}>
+              프로젝트 보기
+            </a>
+            <a href="#lab" className={styles.buttonQuiet}>
+              보안 실습실 써 보기
+            </a>
           </p>
-        )}
-      </header>
+        </div>
 
-      {p.image?.src && (
-        <figure className={styles.shot}>
-          <Image
-            src={p.image.src}
-            alt={p.image.alt}
-            width={p.image.width}
-            height={p.image.height}
-            sizes="(max-width: 900px) 100vw, 560px"
-          />
-          <figcaption>{p.image.caption}</figcaption>
-        </figure>
-      )}
-
-      {p.steps.length > 0 && (
-        <div className={styles.block}>
-          <h4 className={styles.h4}>동작 순서</h4>
-          <ol className={styles.steps}>
-            {p.steps.map((step) => (
-              <li key={step.title}>
-                <strong>{step.title}</strong>
-                <span>{step.body}</span>
+        <figure className={`${styles.log} no-print`} aria-labelledby="log-caption">
+          <figcaption id="log-caption" className={styles.logCaption}>
+            StudyNote에서 PDF 한 개가 요약되기까지
+          </figcaption>
+          <ol className={styles.logLines}>
+            {checks.map((c, i) => (
+              <li
+                key={c.text}
+                className={styles[c.kind]}
+                style={{ animationDelay: `${150 + i * 140}ms` }}
+              >
+                <span className={styles.logMark} aria-hidden>
+                  {mark[c.kind]}
+                </span>
+                {c.text}
               </li>
             ))}
           </ol>
-        </div>
-      )}
+        </figure>
+      </section>
 
-      {p.threats.length > 0 && (
-        <div className={styles.block}>
-          <h4 className={styles.h4}>예상한 공격과 대응</h4>
-          <div className={styles.tableWrap}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th scope="col">위협</th>
-                  <th scope="col">대응</th>
-                </tr>
-              </thead>
-              <tbody>
-                {p.threats.map((t) => (
-                  <tr key={t.threat}>
-                    <th scope="row">{t.threat}</th>
-                    <td>{t.answer}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      {/* ---------- 소개 ---------- */}
+      <section id="about" className={styles.section}>
+        <h2 className={styles.h2}>소개</h2>
+        <div className={styles.prose}>
+          {profile.about.map((text) => (
+            <p key={text}>{text}</p>
+          ))}
         </div>
-      )}
+      </section>
 
-      {p.fixes.length > 0 && (
-        <div className={styles.block}>
-          <h4 className={styles.h4}>만들면서 해결한 문제</h4>
-          <ul className={styles.fixes}>
-            {p.fixes.map((f) => (
-              <li key={f.problem}>
-                <p className={styles.fixProblem}>{f.problem}</p>
-                <dl className={styles.fixBody}>
-                  <div>
-                    <dt>원인</dt>
-                    <dd>{f.cause}</dd>
-                  </div>
-                  <div>
-                    <dt>해결</dt>
-                    <dd>{f.fix}</dd>
-                  </div>
-                </dl>
+      {/* ---------- 기술 ---------- */}
+      <section id="skills" className={styles.section}>
+        <h2 className={styles.h2}>기술</h2>
+        <div className={styles.skillsBody}>
+          <p className={styles.notice}>프로젝트에서 직접 써 본 것만 적었습니다.</p>
+          <dl className={styles.skills}>
+            {profile.skills.map((s) => (
+              <div key={s.group}>
+                <dt>{s.group}</dt>
+                <dd>
+                  <ul className={styles.tags}>
+                    {s.items.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      {/* ---------- 프로젝트 ---------- */}
+      <section id="project" className={styles.section}>
+        <h2 className={styles.h2}>프로젝트</h2>
+        <ProjectExplorer projects={projects} />
+      </section>
+
+      {/* ---------- 보안 실습실 ---------- */}
+      <section id="lab" className={`${styles.section} no-print`}>
+        <h2 className={styles.h2}>보안 실습실</h2>
+        <SecurityLab />
+      </section>
+
+      {/* ---------- GitHub ---------- */}
+      {repos.length > 0 && (
+        <section id="repos" className={`${styles.section} no-print`}>
+          <h2 className={styles.h2}>GitHub 저장소</h2>
+          <ul className={styles.repos}>
+            {repos.map((r) => (
+              <li key={r.name}>
+                <a href={r.url} target="_blank" rel="noreferrer">
+                  {r.name}
+                </a>
+                {r.description && <p>{r.description}</p>}
+                <p className={styles.repoMeta}>
+                  {r.language && <span>{r.language}</span>}
+                  <time dateTime={r.pushedAt}>
+                    {dateFormat.format(new Date(r.pushedAt))} 수정
+                  </time>
+                </p>
               </li>
             ))}
           </ul>
-        </div>
+        </section>
       )}
-    </article>
+
+      {/* ---------- 이력 (data/profile.ts의 timeline을 채우면 나타남) ---------- */}
+      {profile.timeline.length > 0 && (
+        <section id="timeline" className={styles.section}>
+          <h2 className={styles.h2}>이력</h2>
+          <ol className={styles.timeline}>
+            {profile.timeline.map((t) => (
+              <li key={`${t.period}-${t.title}`}>
+                <p className={styles.timelineWhen}>
+                  {t.period} · {t.kind}
+                </p>
+                <p className={styles.fixProblem}>{t.title}</p>
+                {t.detail && <p>{t.detail}</p>}
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      {/* ---------- 방명록 (MongoDB) ---------- */}
+      <section id="guestbook" className={`${styles.section} no-print`}>
+        <h2 className={styles.h2}>방명록</h2>
+        <div className={styles.guestbook}>
+          <p className={styles.prose}>
+            사이트를 보고 남기고 싶은 말이 있으면 적어 주세요.
+          </p>
+          <GuestbookForm />
+
+          {guestbook === null ? (
+            <p className={styles.notice}>
+              방명록을 불러오지 못했어요. 잠시 뒤에 새로고침해 주세요.
+            </p>
+          ) : guestbook.length === 0 ? (
+            <p className={styles.notice}>
+              아직 남겨진 글이 없어요. 첫 글을 남겨 주세요.
+            </p>
+          ) : (
+            <ol className={styles.entries}>
+              {guestbook.map((g) => (
+                <li key={g.id}>
+                  <p className={styles.entryHead}>
+                    <strong>{g.name}</strong>
+                    <time dateTime={g.createdAt}>
+                      {dateFormat.format(new Date(g.createdAt))}
+                    </time>
+                  </p>
+                  {/* 글자로만 출력: <script>를 적어도 실행되지 않음 */}
+                  <p className={styles.entryBody}>{g.message}</p>
+                </li>
+              ))}
+            </ol>
+          )}
+        </div>
+      </section>
+
+      {/* ---------- 연락처 ---------- */}
+      <section id="contact" className={styles.section}>
+        <h2 className={styles.h2}>연락처</h2>
+        <div className={styles.contact}>
+          <dl className={styles.projectMeta}>
+            {profile.email && (
+              <div>
+                <dt>이메일</dt>
+                <dd>
+                  <a href={`mailto:${profile.email}`}>{profile.email}</a>
+                </dd>
+              </div>
+            )}
+            {profile.github && (
+              <div>
+                <dt>GitHub</dt>
+                <dd>
+                  <a href={profile.github} target="_blank" rel="noreferrer">
+                    {profile.github.replace("https://", "")}
+                  </a>
+                </dd>
+              </div>
+            )}
+          </dl>
+          <ContactActions email={profile.email} />
+        </div>
+      </section>
+    </>
   );
 }

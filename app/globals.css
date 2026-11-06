@@ -27,8 +27,30 @@
   --gutter: 24px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
+/* 어두운 화면: 시스템 설정을 따르되, 사용자가 고른 값(data-theme)이 우선. 인쇄는 항상 밝게 */
+@media screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --fog: #11161f;
+    --paper: #18202c;
+    --ink: #e4e8ee;
+    --muted: #9aa3b2;
+    --line: #2c3646;
+    --pass: #6cc59b;
+    --block: #ec7b72;
+    --signal: #f2c14e;
+
+    --log-bg: #0a0f17;
+    --log-text: #dfe5ee;
+    --log-dim: #7d8798;
+    --log-pass: #7fd1a8;
+    --log-border: #2c3646;
+  }
+}
+
+@media screen {
+  :root[data-theme='dark'] {
     color-scheme: dark;
 
     --fog: #11161f;
@@ -100,6 +122,23 @@ ol {
   outline: 3px solid var(--signal);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* 메뉴로 이동했을 때 제목이 고정 머리글에 가리지 않도록 */
+section[id] {
+  scroll-margin-top: 64px;
+}
+
+@media (max-width: 860px) {
+  section[id] {
+    scroll-margin-top: 96px;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
