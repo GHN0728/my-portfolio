@@ -100,26 +100,46 @@
   min-width: 0;
 }
 
-.topics {
+.seminar {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 28px;
+  min-width: 0;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--line);
 }
 
-.topics li {
-  display: grid;
-  align-content: start;
-  gap: 4px;
-  padding: 16px 18px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
+.plainTable {
+  width: 100%;
+  min-width: 34rem; /* 좁은 화면에서는 글자를 끊지 않고 가로로 스크롤 */
+  border-collapse: collapse;
   background: var(--paper);
-}
-
-.topics span {
-  color: var(--muted);
   font-size: 0.9375rem;
   line-height: 1.6;
+}
+
+.plainTable th,
+.plainTable td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.plainTable thead th {
+  border-bottom: 2px solid var(--ink);
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.plainTable tbody th {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.takeaway {
+  padding-left: 14px;
+  border-left: 3px solid var(--signal);
+  font-weight: 700;
 }
 
 .practice {
@@ -340,7 +360,7 @@
 .steps {
   counter-reset: step;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--steps, 4), minmax(0, 1fr));
   gap: 0;
   border-top: 2px solid var(--ink);
 }
@@ -728,8 +748,7 @@
 /* ---------- 좁은 화면 ---------- */
 @media (max-width: 900px) {
   .cards,
-  .repos,
-  .topics {
+  .repos {
     grid-template-columns: 1fr;
   }
 

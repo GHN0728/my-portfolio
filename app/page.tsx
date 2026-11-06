@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { profile } from "@/data/profile";
 import { getGuestbook, getProjects } from "@/lib/data";
 import { getRepos } from "@/lib/github";
@@ -84,19 +85,96 @@ export default async function Home() {
 
       {/* ---------- 클라우드 ---------- */}
       <section id="cloud" className={styles.section}>
-        <h2 className={styles.h2}>클라우드</h2>
+        <h2 className={styles.h2}>클라우드 보안</h2>
         <div className={styles.cloud}>
-          <div className={styles.block}>
-            <h3 className={styles.h4}>관심 있게 공부하는 주제</h3>
-            <ul className={styles.topics}>
-              {profile.cloud.topics.map((t) => (
-                <li key={t.title}>
-                  <strong>{t.title}</strong>
-                  <span>{t.body}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <p className={styles.notice}>S.C.P 동아리 세미나에서 발표한 내용입니다.</p>
+          {profile.cloud.seminars.map((s) => (
+            <article key={s.title} className={styles.seminar}>
+              <header className={styles.projectHead}>
+                <h3 className={styles.cardTitle}>{s.title}</h3>
+                <p>{s.lead}</p>
+                <ul className={styles.tags}>
+                  {s.tools.map((tool) => (
+                    <li key={tool}>{tool}</li>
+                  ))}
+                </ul>
+              </header>
+
+              <div className={styles.block}>
+                <h4 className={styles.h4}>{s.flowTitle}</h4>
+                <ol
+                  className={styles.steps}
+                  style={{ "--steps": s.flow.length } as CSSProperties}
+                >
+                  {s.flow.map((step) => (
+                    <li key={step.title}>
+                      <strong>{step.title}</strong>
+                      <span>{step.body}</span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+
+              {s.results && (
+                <div className={styles.block}>
+                  <h4 className={styles.h4}>{s.results.title}</h4>
+                  <div className={styles.tableWrap}>
+                    <table className={styles.plainTable}>
+                      <thead>
+                        <tr>
+                          <th scope="col">방식</th>
+                          <th scope="col">결과</th>
+                          <th scope="col">의미</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {s.results.rows.map((r) => (
+                          <tr key={r.method}>
+                            <th scope="row">{r.method}</th>
+                            <td>{r.result}</td>
+                            <td>{r.meaning}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.block}>
+                <h4 className={styles.h4}>사례와 분석</h4>
+                <ul className={styles.practice}>
+                  {s.cases.map((c) => (
+                    <li key={c}>{c}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className={styles.block}>
+                <h4 className={styles.h4}>방어 방법</h4>
+                <div className={styles.tableWrap}>
+                  <table className={styles.table}>
+                    <thead>
+                      <tr>
+                        <th scope="col">위협</th>
+                        <th scope="col">대응</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {s.defenses.map((d) => (
+                        <tr key={d.threat}>
+                          <th scope="row">{d.threat}</th>
+                          <td>{d.answer}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <p className={styles.takeaway}>{s.takeaway}</p>
+            </article>
+          ))}
           <div className={styles.block}>
             <h3 className={styles.h4}>이 사이트에서 직접 해 본 것</h3>
             <ul className={styles.practice}>
@@ -112,7 +190,7 @@ export default async function Home() {
       <section id="skills" className={styles.section}>
         <h2 className={styles.h2}>기술</h2>
         <div className={styles.skillsBody}>
-          <p className={styles.notice}>프로젝트에서 직접 써 본 것만 적었습니다.</p>
+          <p className={styles.notice}>프로젝트와 실습에서 직접 써 본 것만 적었습니다.</p>
           <dl className={styles.skills}>
             {profile.skills.map((s) => (
               <div key={s.group}>
